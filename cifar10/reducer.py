@@ -12,7 +12,7 @@ import io
 
 cifar = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
-fs = fs.HadoopFileSystem("hdfs://localhost?user=guest")
+fs = fs.HadoopFileSystem("hdfs://localhost:9000?user=guest")
 
 model = load_model('cifar10_model.h5')
 
