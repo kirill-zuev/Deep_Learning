@@ -37,4 +37,4 @@ for line in sys.stdin:
     if pred == cifar[predicted]:
         k += 1
     print(pred, cifar[predicted], sep='\t')
-print("acc", n/k)
+print("acc", k/n)
