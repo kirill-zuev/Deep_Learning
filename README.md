@@ -6,9 +6,29 @@ README.md для Duplicates of PascalVOC2007
 
 При запуске autoencoder.py:
 
-Обучаю свёрточный автоэнкодер на датасете PascalVOC2007(можно брать любой датасет), извлекаю для изображений латентное представление, сохраняю только encoder
+Обучаю свёрточный автоэнкодер на датасете PascalVOC2007(можно брать любой датасет), извлекаю для изображений латентное представление, сохраняю только encoder:
 
-В латентном пространстве изображений обучаю BucketedRandomProjectionLSH, сохраняю обученную модель BucketedRandomProjectionLSH
+autoencoder = tf.keras.models.Model(inputs=inp, outputs=reconstruction)
+
+autoencoder.compile(optimizer="adamax", loss='mse')
+
+autoencoder.fit(x=train_data, y=train_data, epochs=10, verbose=1)
+
+encoder.save('mencoder.h5')
+
+images = train_data
+
+codes = encoder.predict(images)
+
+assert len(codes) == len(images)
+
+В латентном пространстве изображений обучаю BucketedRandomProjectionLSH, сохраняю обученную модель BucketedRandomProjectionLSH:
+
+brp = BucketedRandomProjectionLSH(inputCol="features", outputCol="hashes", bucketLength=2.0, numHashTables=3)
+
+model = brp.fit(df)
+
+model.write().overwrite().save('BRP.model')
 
 Автоэнкодер строится при помощи соединения сверточных слоев и слоёв пуллинга, которые уменьшают размерность изображения и извлекают наиболее важные признаки. 
 
@@ -164,6 +184,26 @@ only showing top 20 rows
 Запуск mapper-reducer: 
 
 /hadoop-3.3.6/bin/hadoop jar  /hadoop-3.3.6/share/hadoop/tools/lib/hadoop-streaming-3.3.6.jar -input /PascalVOC2007/Annotations -output /ZuevKP/outputlab -mapper ~/ZuevKP/lab1/mapper.py -reducer ~/ZuevKP/lab1/reducer.py
+
+Передаю в mapper обученные модели encoder и BucketedRandomProjectionLSH:
+
+model = load_model("mencoder.h5")
+
+loaded_model = BucketedRandomProjectionLSHModel.load("BRP.model")
+
+Применяю approxNearestNeighbors для поиска похожих изображений:
+
+code = model.predict(image_array)
+
+spark = SparkSession.builder.appName("ReadParquet").getOrCreate()
+
+df = spark.read.parquet("data.parquet")
+
+code = np.array(code)
+
+key = Vectors.dense(code)
+
+result = loaded_model.approxNearestNeighbors(df, key, 5)
 
 Формат результата:
 
