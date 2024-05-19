@@ -1,12 +1,12 @@
-##### README.md для Duplicates of PascalVOC2007
+# README.md для Duplicates of PascalVOC2007
 
-# Запуск autoencoder.py: 
+##### Запуск autoencoder.py: 
 
 /nn/bin/python3 autoencoder.py(лучше запускать в google colab/JupyterNotebook)
 
-# При запуске autoencoder.py:
+##### При запуске autoencoder.py:
 
-# Обучаю свёрточный автоэнкодер на датасете PascalVOC2007(можно брать любой датасет), извлекаю для изображений латентное представление, сохраняю только encoder:
+##### Обучаю свёрточный автоэнкодер на датасете PascalVOC2007(можно брать любой датасет), извлекаю для изображений латентное представление, сохраняю только encoder:
 
 autoencoder = tf.keras.models.Model(inputs=inp, outputs=reconstruction)
 
@@ -22,7 +22,7 @@ codes = encoder.predict(images)
 
 assert len(codes) == len(images)
 
-# В латентном пространстве изображений обучаю BucketedRandomProjectionLSH, сохраняю обученную модель BucketedRandomProjectionLSH:
+##### В латентном пространстве изображений обучаю BucketedRandomProjectionLSH, сохраняю обученную модель BucketedRandomProjectionLSH:
 
 brp = BucketedRandomProjectionLSH(inputCol="features", outputCol="hashes", bucketLength=2.0, numHashTables=3)
 
@@ -30,7 +30,7 @@ model = brp.fit(df)
 
 model.write().overwrite().save('BRP.model')
 
-# Автоэнкодер:
+##### Автоэнкодер:
 
 Автоэнкодер строится при помощи соединения сверточных слоев и слоёв пуллинга, которые уменьшают размерность изображения и извлекают наиболее важные признаки. 
 
@@ -38,7 +38,7 @@ model.write().overwrite().save('BRP.model')
 
 Для задачи кодирования изображения в вектор, нам нужен слой после автоэнкодера, т.е. векторное представление изображения, которое в дальнейшем будет использоваться для поиска похожих изображений.
 
-# Применение функции summary() к модели покажет описание работы модели слой за слоем:
+##### Применение функции summary() к модели покажет описание работы модели слой за слоем:
 
 Model: "sequential_4"
 _________________________________________________________________
@@ -71,7 +71,7 @@ Non-trainable params: 0 (0.00 Byte)
 _________________________________________________________________
 Model: "sequential_5"
 _________________________________________________________________
- Layer (type)                Output Shape              Param #   
+ Layer (type)                Output Shape              Param #####   
 =================================================================
  dense_5 (Dense)             (None, 50176)             1655808   
                                                                  
@@ -131,7 +131,7 @@ Epoch 10/10
 
 32/32 [==============================] - 205s 6s/step - loss: 0.0317
 
-# DataFrame с векторными представлениями изображений:
+##### DataFrame с векторными представлениями изображений:
 
 +-----+--------------------+
 
@@ -183,17 +183,17 @@ Epoch 10/10
 
 only showing top 20 rows
 
-# Запуск mapper-reducer: 
+##### Запуск mapper-reducer: 
 
 /hadoop-3.3.6/bin/hadoop jar  /hadoop-3.3.6/share/hadoop/tools/lib/hadoop-streaming-3.3.6.jar -input /PascalVOC2007/Annotations -output /ZuevKP/outputlab -mapper ~/ZuevKP/lab1/mapper.py -reducer ~/ZuevKP/lab1/reducer.py
 
-# Передаю в mapper обученные модели encoder и BucketedRandomProjectionLSH:
+##### Передаю в mapper обученные модели encoder и BucketedRandomProjectionLSH:
 
 model = load_model("mencoder.h5")
 
 loaded_model = BucketedRandomProjectionLSHModel.load("BRP.model")
 
-# Применяю approxNearestNeighbors для поиска похожих изображений:
+##### Применяю approxNearestNeighbors для поиска похожих изображений:
 
 code = model.predict(image_array)
 
@@ -207,6 +207,6 @@ key = Vectors.dense(code)
 
 result = loaded_model.approxNearestNeighbors(df, key, 5)
 
-# Формат результата:
+##### Формат результата:
 
 numbers of Nearest Neighbors:  image number: 
