@@ -1,3 +1,5 @@
+README.md для Duplicates of PascalVOC2007
+
 Запуск autoencoder.py: 
 
 /nn/bin/python3 autoencoder.py(лучше запускать в google colab/JupyterNotebook)
@@ -162,3 +164,7 @@ only showing top 20 rows
 Запуск mapper-reducer: 
 
 /hadoop-3.3.6/bin/hadoop jar  /hadoop-3.3.6/share/hadoop/tools/lib/hadoop-streaming-3.3.6.jar -input /PascalVOC2007/Annotations -output /ZuevKP/outputlab -mapper ~/ZuevKP/lab1/mapper.py -reducer ~/ZuevKP/lab1/reducer.py
+
+Формат результата:
+
+numbers of Nearest Neighbors:  image number: 
