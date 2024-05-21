@@ -2,7 +2,7 @@
 
 ##### Запуск autoencoder.py: 
 
-/nn/bin/python3 autoencoder.py(лучше запускать в google colab/JupyterNotebook)
+/nn/bin/python3 autoencoder.py(я запускал в google colab)
 
 ##### При запуске autoencoder.py:
 
