@@ -209,9 +209,9 @@ result = loaded_model.approxNearestNeighbors(df, key, 5)
 
 ##### Формат результата:
 
-numbers of Nearest Neighbors: [949, 483, 339, 796, 997] image number: 000084.jpg
+numbers of Nearest Neighbors: [950, 484, 340, 797, 998] image number: 000084.jpg
 
-номер 949, 483, 339, 796, 997 соответствуют изображениям 000949.jpg 000483.jpg 000339.jpg 000796.jpg 000997.jpg
+номер 950, 484, 340, 797, 998 соответствуют изображениям 000950.jpg 000484.jpg 000340.jpg 000797.jpg 000998.jpg
 
 ##### Посмотреть результат:
 
